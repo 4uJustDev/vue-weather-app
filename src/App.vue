@@ -1,13 +1,11 @@
 <template>
     <v-app>
-        <v-main>
-            <WeatherPanel />
-        </v-main>
+        <WeatherPanel />
     </v-app>
 </template>
 
 <script>
-import WeatherPanel from './components/WeatherPanel.vue';
+import WeatherPanel from '@/components/WeatherPanel';
 
 export default {
     components: {
@@ -15,5 +13,3 @@ export default {
     },
 };
 </script>
-
-<style></style>
