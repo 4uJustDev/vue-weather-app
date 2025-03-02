@@ -1,5 +1,8 @@
 # vue-weather-app
 
+APIS
+Logo
+
 ## Project setup
 
 ```
