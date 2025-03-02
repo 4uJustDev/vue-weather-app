@@ -19,7 +19,7 @@
 
                 <v-divider class="my-4"></v-divider>
 
-                <div v-if="weather">
+                <div v-for="(weather, index) in weatherStack" :key="index">
                     <h2>{{ weather.name }}, {{ weather.sys.country }}</h2>
                     <p>{{ weather.weather[0].description }}</p>
                     <p>
@@ -28,6 +28,10 @@
                     </p>
                     <p>Влажность: {{ weather.main.humidity }}%</p>
                     <p>Ветер: {{ weather.wind.speed }} м/с</p>
+                    <v-divider
+                        v-if="index < weatherStack.length - 1"
+                        class="my-4"
+                    ></v-divider>
                 </div>
             </v-card-text>
         </v-card>
@@ -52,7 +56,7 @@ export default {
         return {
             city: '',
             cities: [],
-            weather: null,
+            weatherStack: [],
             apiWeatherKey: process.env.VUE_APP_WEATHER_API_KEY,
 
             // Уведомления об ошибках
@@ -87,7 +91,10 @@ export default {
                     `https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=${this.apiWeatherKey}`,
                 );
 
-                this.cities = response.data.map((city) => city.name);
+                this.cities = [
+                    ...new Set(response.data.map((city) => city.name)),
+                ];
+
                 console.log(this.cities);
             } catch (error) {
                 console.error('Ошибка при поиске городов:', error);
@@ -106,7 +113,7 @@ export default {
                     `https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=metric&appid=${this.apiWeatherKey}`,
                 );
 
-                this.weather = response.data;
+                this.weatherStack.unshift(response.data);
             } catch (error) {
                 console.error('Ошибка при получении данных о погоде:', error);
                 this.errorMessage = 'Не удалось получить данные о погоде';
